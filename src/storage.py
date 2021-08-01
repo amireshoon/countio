@@ -79,14 +79,14 @@ class ioStorage:
                 self.__commit()
                 return self.get_account_counts(account)
         
-        if not counts:
-            counts = {
-                "hid" : account,
-                "count" : -1
-            }
-
+        counts = {
+            "hid" : account,
+            "count" : int(op == 1 if 1 else -1)
+        }
+        
         self.counts.append(counts)
         self.__commit()
+        return self.get_account_counts(account)
 
     def __commit(self):
         with open(os.path.dirname(os.path.abspath(__file__)) + '/cloud/accounts.json', 'w+') as f:
