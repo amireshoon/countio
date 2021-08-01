@@ -20,6 +20,13 @@ def new_account():
 def remove_account():
     return jsonify(ls.remove_account("test"))
 
+@app.route('/count/+')
+def increase_count():
+    return jsonify(ls.increase_count("f8b9b1ba18"))
+
+@app.route('/count/-')
+def decrease_count():
+    return jsonify(ls.decrease_count("f8b9b1ba18"))
 
 if __name__ == '__main__':
     app.run(debug=True, use_reloader=True)

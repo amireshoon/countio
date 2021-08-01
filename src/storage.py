@@ -28,13 +28,12 @@ class ioStorage:
                 return account
         return {}
         
-
     def get_account_counts(self, hid):
         if not self.search_in_accounts(hid):
             return "No account founded"
         
         for counts in self.counts:
-            if counts['account'] == hid:
+            if counts['hid'] == hid:
                 return counts
 
     def store_account(self, name):
@@ -57,7 +56,35 @@ class ioStorage:
             if account['name'] == query or account['hid'] == query:
                 del self.accounts[i]
                 break
-            
+
+        self.__commit()
+
+    def increase_count(self, account):
+        return self.__do_the_math(account, 1)
+
+    def decrease_count(self, account):
+        return self.__do_the_math(account, -1)
+
+    def __do_the_math(self, account, op):
+        if not self.search_in_accounts(account):
+            return "No account founded"
+        
+        for i, counts in enumerate(self.counts):
+            if counts['hid'] == account:
+                if op == 1:
+                    self.counts[i]['count'] = self.counts[i]['count'] + 1
+                else:
+                    self.counts[i]['count'] = self.counts[i]['count'] - 1
+                self.__commit()
+                return self.get_account_counts(account)
+        
+        if not counts:
+            counts = {
+                "hid" : account,
+                "count" : -1
+            }
+
+        self.counts.append(counts)
         self.__commit()
 
     def __commit(self):
