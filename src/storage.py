@@ -48,6 +48,18 @@ class ioStorage:
             return "created"
         return "a user already exists with this name"
 
+    def remove_account(self, query):
+        account = self.search_in_accounts(query)
+        if not account:
+            return "not founded"
+        
+        for i, account in enumerate(self.accounts):
+            if account['name'] == query or account['hid'] == query:
+                del self.accounts[i]
+                break
+            
+        self.__commit()
+
     def __commit(self):
         with open(os.path.dirname(os.path.abspath(__file__)) + '/cloud/accounts.json', 'w+') as f:
             json.dump(self.accounts, f)

@@ -16,5 +16,10 @@ def index():
 def new_account():
     return jsonify(ls.store_account("test"))
 
+@app.route('/remove/account')
+def remove_account():
+    return jsonify(ls.remove_account("test"))
+
+
 if __name__ == '__main__':
     app.run(debug=True, use_reloader=True)
