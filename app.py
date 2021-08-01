@@ -28,5 +28,11 @@ def increase_count(hid):
 def decrease_count(hid):
     return jsonify(ls.decrease_count(hid))
 
+@app.after_request
+def after_request(response):
+    header = response.headers
+    header['Access-Control-Allow-Origin'] = '*'
+    return response
+
 if __name__ == '__main__':
     app.run(debug=True, use_reloader=True)
