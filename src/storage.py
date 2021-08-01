@@ -58,6 +58,7 @@ class ioStorage:
                 break
 
         self.__commit()
+        return "removed"
 
     def increase_count(self, account):
         return self.__do_the_math(account, 1)
