@@ -27,6 +27,10 @@ class ioStorage:
             "uuid" : "test",
             "name" : name
         })
+        self.__commit()
 
     def __commit(self):
-        pass
+        with open(os.path.dirname(os.path.abspath(__file__)) + '/cloud/accounts.json', 'w') as f:
+            json.dump(self.accounts, f)
+        with open(os.path.dirname(os.path.abspath(__file__)) + '/cloud/count.json', 'w') as f:
+            json.dump(self.counts, f)
