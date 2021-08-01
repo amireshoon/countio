@@ -6,7 +6,8 @@ ls = ioStorage()
 
 @app.route('/')
 def index():
-    
+    return ls.search_in_accounts('test')
+        
     return """
         <h1>So far 0!</h1>
     """
