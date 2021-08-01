@@ -1,6 +1,8 @@
-from flask import Flask
+from flask import Flask, jsonify
+from src.storage import ioStorage
 
 app = Flask(__name__)
+ls = ioStorage()
 
 @app.route('/')
 def index():
