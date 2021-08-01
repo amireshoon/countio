@@ -30,7 +30,12 @@ class ioStorage:
         
 
     def get_account_counts(self, auuid):
-        pass
+        if not self.search_in_accounts(auuid):
+            return "No account founded"
+        
+        for counts in self.counts:
+            if counts['account'] == auuid:
+                return counts
 
     def store_account(self, name):
         if not self.search_in_accounts(name):
@@ -39,9 +44,15 @@ class ioStorage:
             "name" : name
             })
             self.__commit()
+        return "a user already exists with this name"
 
     def __commit(self):
         with open(os.path.dirname(os.path.abspath(__file__)) + '/cloud/accounts.json', 'w+') as f:
             json.dump(self.accounts, f)
         with open(os.path.dirname(os.path.abspath(__file__)) + '/cloud/counts.json', 'w+') as f:
             json.dump(self.counts, f)
+
+        self.__reload()
+
+    def __reload(self):
+        self.__init__()
