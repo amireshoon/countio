@@ -24,26 +24,28 @@ class ioStorage:
             
     def search_in_accounts(self, query):
         for account in self.accounts:
-            if account['name'] == query or account['uuid'] == query:
+            if account['name'] == query or account['hid'] == query:
                 return account
         return {}
         
 
-    def get_account_counts(self, auuid):
-        if not self.search_in_accounts(auuid):
+    def get_account_counts(self, hid):
+        if not self.search_in_accounts(hid):
             return "No account founded"
         
         for counts in self.counts:
-            if counts['account'] == auuid:
+            if counts['account'] == hid:
                 return counts
 
     def store_account(self, name):
         if not self.search_in_accounts(name):
+            import hashlib
             self.accounts.append({
-            "uuid" : "test",
+            "hid" : hashlib.sha1(("auicio"+name+"#$").encode("UTF-8")).hexdigest()[:10],
             "name" : name
             })
             self.__commit()
+            return "created"
         return "a user already exists with this name"
 
     def __commit(self):
