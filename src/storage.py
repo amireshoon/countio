@@ -30,7 +30,7 @@ class ioStorage:
         
     def get_account_counts(self, hid):
         if not self.search_in_accounts(hid):
-            return "No account founded"
+            return self.__throw("No app founded with this name or id", True)
         
         for counts in self.counts:
             if counts['hid'] == hid:
@@ -40,17 +40,17 @@ class ioStorage:
         if not self.search_in_accounts(name):
             import hashlib
             self.accounts.append({
-            "hid" : hashlib.sha1(("auicio"+name+"#$").encode("UTF-8")).hexdigest()[:10],
-            "name" : name
+                "hid" : hashlib.sha1(("auicio"+name+"#$").encode("UTF-8")).hexdigest()[:10],
+                "name" : name
             })
             self.__commit()
-            return "created"
-        return "a user already exists with this name"
+            return self.search_in_accounts(name)
+        return self.__throw("an app already founded with this name", True)
 
     def remove_account(self, query):
         account = self.search_in_accounts(query)
         if not account:
-            return "not founded"
+            return self.__throw("No app founded with this name or id", True)
         
         for i, account in enumerate(self.accounts):
             if account['name'] == query or account['hid'] == query:
@@ -58,7 +58,9 @@ class ioStorage:
                 break
 
         self.__commit()
-        return "removed"
+        
+        # TODO: Remove counts too
+        return self.__throw("App removed successfully", False)
 
     def increase_count(self, account):
         return self.__do_the_math(account, 1)
@@ -68,7 +70,7 @@ class ioStorage:
 
     def __do_the_math(self, account, op):
         if not self.search_in_accounts(account):
-            return "No account founded"
+            return self.__throw("No app founded with this name or id", True)
         
         for i, counts in enumerate(self.counts):
             if counts['hid'] == account:
@@ -98,3 +100,10 @@ class ioStorage:
 
     def __reload(self):
         self.__init__()
+
+    def __throw(self, message, error = True):
+        return {
+            "error" : error,
+            "message" : message,
+            "version" : 1.0
+        }
