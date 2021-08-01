@@ -4,7 +4,7 @@ from pathlib import Path
 
 class ioStorage:
     def __init__(self):
-        if Path(os.path.dirname(os.path.abspath(__file__)) + '/cloud/accounts.json').is_file():
+        if not Path(os.path.dirname(os.path.abspath(__file__)) + '/cloud/accounts.json').is_file():
             self.accounts = []
             self.counts = []
             self.__commit()
